@@ -5,17 +5,17 @@ const prisma = require('../config/db');
 
 // ইউজার তৈরি করুন (পোস্ট ছাড়া)
 const createUser = asyncHandler(async (req, res) => {
-  const { name, email } = req.body;
+  const { name, email,age } = req.body;
 
-  if (!name || !email) {
+  if (!name || !email || !age) {
     return res.status(400).json({
       success: false,
-      message: 'Name and email are required',
+      message: 'Name, email and age are required',
     });
   }
 
   const user = await prisma.user.create({
-    data: { name, email },
+    data: { name, email,age },
   });
 
   res.status(201).json({
