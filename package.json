@@ -1,0 +1,28 @@
+{
+  "name": "prisma-expostgres",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "migrate": "prisma migrate dev",
+    "migrate:reset": "prisma migrate reset",
+    "studio": "prisma studio",
+    "generate": "prisma generate",
+    "db:push": "prisma db push",
+    "test": "node test-db.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.8.0",
+    "@prisma/client": "^7.8.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "pg": "^8.21.0",
+    "prisma": "^7.8.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
