@@ -11,7 +11,7 @@ datasource db {
 // ==================== MODELS ====================
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email     String   @unique
   name      String?
   age       Int?
@@ -26,26 +26,26 @@ model User {
 }
 
 model Profile {
-  id     Int     @id @default(autoincrement())
+  id     String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   bio    String?
   avatar String?
 
-  // Foreign key
-  userId Int     @unique @map("user_id")
+  // Foreign key — @db.Uuid অবশ্যই দিতে হবে
+  userId String  @unique @map("user_id") @db.Uuid
   user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("profiles")
 }
 
 model Post {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   title     String
   content   String?
   published Boolean  @default(false)
   createdAt DateTime @default(now()) @map("created_at")
 
-  // Foreign key
-  authorId  Int      @map("author_id")
+  // Foreign key — @db.Uuid অবশ্যই দিতে হবে
+  authorId  String   @map("author_id") @db.Uuid
   author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
   // Many-to-many with Category
@@ -55,7 +55,7 @@ model Post {
 }
 
 model Category {
-  id    Int    @id @default(autoincrement())
+  id    String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name  String @unique
 
   posts Post[]

@@ -1,13 +1,12 @@
 const asyncHandler = require('../middleware/asyncHandler');
 
-
 const prisma = require('../config/db');
 
 // ✅ CREATE post - নতুন পোস্ট তৈরি
 const createPost = asyncHandler(async (req, res) => {
   const { title, content, authorId } = req.body;
 
-  // Validation
+  // Validation - সব ফিল্ড আছে কিনা চেক করুন
   if (!title || !content || !authorId) {
     return res.status(400).json({
       success: false,
@@ -15,11 +14,9 @@ const createPost = asyncHandler(async (req, res) => {
     });
   }
 
-  // ✅ চেক করুন author (user) আসলেই আছে কিনা
+  // চেক করুন author (user) আসলেই আছে কিনা
   const authorExists = await prisma.user.findUnique({
-    where: {
-      id: authorId, // UUID string সরাসরি, parseInt নয়!
-    },
+    where: { id: parseInt(authorId) },
   });
 
   if (!authorExists) {
@@ -29,21 +26,15 @@ const createPost = asyncHandler(async (req, res) => {
     });
   }
 
-  // ✅ পোস্ট তৈরি করুন
+  // পোস্ট তৈরি করুন
   const post = await prisma.post.create({
     data: {
       title,
       content,
-      authorId, // UUID string সরাসরি দাও
+      authorId: parseInt(authorId),
     },
     include: {
-      author: {
-        select: {
-          id: true,
-          name: true,
-          email: true,
-        },
-      },
+      author: true, // author এর তথ্যও দেখাবে
     },
   });
 
@@ -53,7 +44,6 @@ const createPost = asyncHandler(async (req, res) => {
     message: 'Post created successfully',
   });
 });
-
 
 // ✅ GET all posts - সব পোস্ট দেখুন
 const getAllPosts = asyncHandler(async (req, res) => {

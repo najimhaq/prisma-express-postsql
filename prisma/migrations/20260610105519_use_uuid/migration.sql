@@ -1,6 +1,7 @@
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
 -- CreateTable
 CREATE TABLE "users" (
-    "id" SERIAL NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "email" TEXT NOT NULL,
     "name" TEXT,
     "age" INTEGER,
@@ -12,29 +13,29 @@ CREATE TABLE "users" (
 
 -- CreateTable
 CREATE TABLE "profiles" (
-    "id" SERIAL NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "bio" TEXT,
     "avatar" TEXT,
-    "user_id" INTEGER NOT NULL,
+    "user_id" UUID NOT NULL,
 
     CONSTRAINT "profiles_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "posts" (
-    "id" SERIAL NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "title" TEXT NOT NULL,
     "content" TEXT,
     "published" BOOLEAN NOT NULL DEFAULT false,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "author_id" INTEGER NOT NULL,
+    "author_id" UUID NOT NULL,
 
     CONSTRAINT "posts_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "categories" (
-    "id" SERIAL NOT NULL,
+    "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "name" TEXT NOT NULL,
 
     CONSTRAINT "categories_pkey" PRIMARY KEY ("id")
@@ -42,8 +43,8 @@ CREATE TABLE "categories" (
 
 -- CreateTable
 CREATE TABLE "_CategoryToPost" (
-    "A" INTEGER NOT NULL,
-    "B" INTEGER NOT NULL,
+    "A" UUID NOT NULL,
+    "B" UUID NOT NULL,
 
     CONSTRAINT "_CategoryToPost_AB_pkey" PRIMARY KEY ("A","B")
 );
